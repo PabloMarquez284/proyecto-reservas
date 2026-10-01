@@ -1,0 +1,46 @@
+]633;E;{ echo "# Pruebas de Nginx como punto de entrada - 01/10/2026"\x3b echo\x3b echo "## 1. Página estática"\x3b echo '$ curl -s http://localhost/'\x3b curl -s http://localhost/\x3b echo\x3b echo "## 2. Cabeceras (no debe mostrar la versión de Nginx)"\x3b echo '$ curl -sI http://localhost/'\x3b curl -sI http://localhost/\x3b echo\x3b echo "## 3. API a través de Nginx: estado"\x3b echo '$ curl -s http://localhost/api/health'\x3b curl -s http://localhost/api/health\x3b echo\x3b echo\x3b echo "## 4. API a través de Nginx: crear reserva"\x3b echo '$ curl -s -X POST http://localhost/api/reservas ...'\x3b curl -s -X POST -H 'Content-Type: application/json' -d '{"actividad":"Flamenco en la Casa de la Memoria","nombre":"Pablo","fecha":"2026-10-20"}' http://localhost/api/reservas\x3b echo\x3b echo\x3b echo "## 5. API a través de Nginx: listar reservas"\x3b echo '$ curl -s http://localhost/api/reservas'\x3b curl -s http://localhost/api/reservas\x3b echo\x3b echo\x3b echo "## 6. Puertos publicados (solo web debe tener puerto hacia fuera)"\x3b echo '$ docker compose ps'\x3b docker compose ps\x3b } > docs/nginx-pruebas.txt;e3054fda-f703-4b54-b715-2a3e57a42348]633;C# Pruebas de Nginx como punto de entrada - 01/10/2026
+
+## 1. Página estática
+$ curl -s http://localhost/
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservas culturales de Sevilla</title>
+</head>
+<body>
+  <h1>Reservas culturales de Sevilla</h1>
+  <p>Servidor web funcionando. La API está en <code>/api/reservas</code>.</p>
+</body>
+</html>
+## 2. Cabeceras (no debe mostrar la versión de Nginx)
+$ curl -sI http://localhost/
+HTTP/1.1 200 OK
+Server: nginx
+Date: Thu, 01 Oct 2026 22:48:06 GMT
+Content-Type: text/html
+Content-Length: 274
+Last-Modified: Thu, 01 Oct 2026 22:36:37 GMT
+Connection: keep-alive
+ETag: "6abee075-112"
+Accept-Ranges: bytes
+
+
+## 3. API a través de Nginx: estado
+$ curl -s http://localhost/api/health
+{"estado":"ok"}
+
+## 4. API a través de Nginx: crear reserva
+$ curl -s -X POST http://localhost/api/reservas ...
+{"id":3,"actividad":"Flamenco en la Casa de la Memoria","nombre":"Pablo","fecha":"2026-10-20T00:00:00.000Z"}
+
+## 5. API a través de Nginx: listar reservas
+$ curl -s http://localhost/api/reservas
+[{"id":1,"actividad":"Visita a la Catedral","nombre":"Pablo","fecha":"2026-10-10T00:00:00.000Z"},{"id":2,"actividad":"Concierto en el Maestranza","nombre":"Pablo","fecha":"2026-10-15T00:00:00.000Z"},{"id":3,"actividad":"Flamenco en la Casa de la Memoria","nombre":"Pablo","fecha":"2026-10-20T00:00:00.000Z"}]
+
+## 6. Puertos publicados (solo web debe tener puerto hacia fuera)
+$ docker compose ps
+NAME           IMAGE                   COMMAND                  SERVICE   CREATED          STATUS          PORTS
+reservas_api   proyecto-reservas-api   "docker-entrypoint.s…"   api       22 minutes ago   Up 22 minutes   3000/tcp
+reservas_db    postgres:16.4           "docker-entrypoint.s…"   db        6 hours ago      Up 6 hours      5432/tcp
+reservas_web   nginx:1.27-alpine       "/docker-entrypoint.…"   web       38 seconds ago   Up 37 seconds   0.0.0.0:80->80/tcp, [::]:80->80/tcp
