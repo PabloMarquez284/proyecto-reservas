@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16.4
+    container_name: reservas_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: reservas_sevilla
+      POSTGRES_USER: PabloMarquez
+      POSTGRES_PASSWORD: Pml.028466
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
