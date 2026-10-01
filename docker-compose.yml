@@ -4,11 +4,23 @@ services:
     container_name: reservas_db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: reservas_sevilla
-      POSTGRES_USER: PabloMarquez
-      POSTGRES_PASSWORD: Pml.028466
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/postgresql/data
+
+  api:
+    build: ./api
+    container_name: reservas_api
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
 
 volumes:
   db_data:
