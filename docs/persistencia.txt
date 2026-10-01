@@ -1,0 +1,7 @@
+CREATE TABLE
+INSERT 0 1
+ id 
+----
+  1
+(1 row)
+

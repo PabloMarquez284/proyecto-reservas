@@ -1,0 +1,2 @@
+NAME          IMAGE           COMMAND                  SERVICE   CREATED          STATUS          PORTS
+reservas_db   postgres:16.4   "docker-entrypoint.s…"   db        19 seconds ago   Up 18 seconds   5432/tcp
